@@ -1,32 +1,33 @@
-import { Tabs } from 'expo-router';
 import React from 'react';
+import { Tabs } from 'expo-router';
+import { Provider } from 'react-redux';
+import store from '@/store'; // Ensure this path points to your Redux store
 import { TabBarIcon } from '@/components/navigation/TabBarIcon';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
-import axios from 'axios';
-import CApi from '@/lib/CApi';
-import { Provider } from 'react-redux';
-export default function TabLayout() {
+
+export default function Layout() {
   const colorScheme = useColorScheme();
 
   return (
-    <Tabs
-      screenOptions={({ route }) => ({
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-        // Hide the tab bar in all screens by default
-        tabBarStyle: { display: 'none' }, 
-      })}
-    >
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Home',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'home' : 'home-outline'} color={color} />
-          ),
+    <Provider store={store}>
+      <Tabs
+        screenOptions={{
+          tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+          headerShown: false,
+          tabBarStyle: { display: 'none' }, // Hides the tab bar
         }}
-      />
-    </Tabs>
+      >
+        <Tabs.Screen
+          name="index"
+          options={{
+            title: 'Home',
+            tabBarIcon: ({ color, focused }) => (
+              <TabBarIcon name={focused ? 'home' : 'home-outline'} color={color} />
+            ),
+          }}
+        />
+      </Tabs>
+    </Provider>
   );
 }
